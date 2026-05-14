@@ -1,0 +1,30 @@
+name: Test regex with flags
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          text: "Hello, World!"
+          regex: "hello, (\\w+)!"
+          flags: "i"
+      - name: Assert case-insensitive match works with flags
+        env:
+          ACTUAL_MATCH: ${{ steps.action.outputs.match }}
+          ACTUAL_GROUP1: ${{ steps.action.outputs.group1 }}
+        run: |
+          echo "match: $ACTUAL_MATCH"
+          echo "group1: $ACTUAL_GROUP1"
+          if [ "$ACTUAL_MATCH" != "Hello, World!" ]; then
+            echo "FAIL: expected match to be 'Hello, World!' but got '$ACTUAL_MATCH'"
+            exit 1
+          fi
+          if [ "$ACTUAL_GROUP1" != "World" ]; then
+            echo "FAIL: expected group1 to be 'World' but got '$ACTUAL_GROUP1'"
+            exit 1
+          fi
+          echo "PASS"

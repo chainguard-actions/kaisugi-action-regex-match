@@ -1,0 +1,23 @@
+name: Test regex no match
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          text: "Hello, World!"
+          regex: "^\\d+$"
+      - name: Assert no match returns empty string
+        env:
+          ACTUAL_MATCH: ${{ steps.action.outputs.match }}
+        run: |
+          echo "match: '$ACTUAL_MATCH'"
+          if [ "$ACTUAL_MATCH" != "" ]; then
+            echo "FAIL: expected match to be empty string but got '$ACTUAL_MATCH'"
+            exit 1
+          fi
+          echo "PASS"
