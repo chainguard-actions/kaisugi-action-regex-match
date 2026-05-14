@@ -1,0 +1,46 @@
+name: Test regex capturing groups
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          text: "2024-01-15"
+          regex: "([0-9]{4})-([0-9]{2})-([0-9]{2})"
+      - name: Assert match output
+        env:
+          ACTUAL_MATCH: ${{ steps.action.outputs.match }}
+          ACTUAL_GROUP1: ${{ steps.action.outputs.group1 }}
+          ACTUAL_GROUP2: ${{ steps.action.outputs.group2 }}
+          ACTUAL_GROUP3: ${{ steps.action.outputs.group3 }}
+        run: |
+          echo "match: $ACTUAL_MATCH"
+          echo "group1: $ACTUAL_GROUP1"
+          echo "group2: $ACTUAL_GROUP2"
+          echo "group3: $ACTUAL_GROUP3"
+
+          if [ "$ACTUAL_MATCH" != "2024-01-15" ]; then
+            echo "FAIL: expected match '2024-01-15' but got '$ACTUAL_MATCH'"
+            exit 1
+          fi
+
+          if [ "$ACTUAL_GROUP1" != "2024" ]; then
+            echo "FAIL: expected group1 '2024' but got '$ACTUAL_GROUP1'"
+            exit 1
+          fi
+
+          if [ "$ACTUAL_GROUP2" != "01" ]; then
+            echo "FAIL: expected group2 '01' but got '$ACTUAL_GROUP2'"
+            exit 1
+          fi
+
+          if [ "$ACTUAL_GROUP3" != "15" ]; then
+            echo "FAIL: expected group3 '15' but got '$ACTUAL_GROUP3'"
+            exit 1
+          fi
+
+          echo "PASS"

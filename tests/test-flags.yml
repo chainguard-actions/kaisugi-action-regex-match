@@ -1,0 +1,40 @@
+name: Test regex with flags
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action-with-flag
+        uses: .
+        with:
+          text: "Hello World"
+          regex: "hello world"
+          flags: "i"
+      - name: Assert case-insensitive match with flag
+        env:
+          ACTUAL: ${{ steps.action-with-flag.outputs.match }}
+        run: |
+          echo "actual: $ACTUAL"
+          if [ "$ACTUAL" != "Hello World" ]; then
+            echo "FAIL: expected 'Hello World' but got '$ACTUAL'"
+            exit 1
+          fi
+          echo "PASS"
+      - id: action-no-match
+        uses: .
+        with:
+          text: "Hello World"
+          regex: "hello world"
+          flags: ""
+      - name: Assert no match without case-insensitive flag
+        env:
+          ACTUAL: ${{ steps.action-no-match.outputs.match }}
+        run: |
+          echo "actual: '$ACTUAL'"
+          if [ "$ACTUAL" != "" ]; then
+            echo "FAIL: expected empty match but got '$ACTUAL'"
+            exit 1
+          fi
+          echo "PASS"
