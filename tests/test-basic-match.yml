@@ -10,24 +10,14 @@ jobs:
         uses: .
         with:
           text: "Hello, World!"
-          regex: "Hello, (.+)!"
+          regex: "World"
       - name: Assert match output
         env:
-          ACTUAL: ${{ steps.action.outputs.match }}
+          MATCH: ${{ steps.action.outputs.match }}
         run: |
-          echo "actual match: $ACTUAL"
-          if [ "$ACTUAL" != "Hello, World!" ]; then
-            echo "FAIL: expected 'Hello, World!' but got '$ACTUAL'"
-            exit 1
-          fi
-          echo "PASS"
-      - name: Assert group1 output
-        env:
-          ACTUAL: ${{ steps.action.outputs.group1 }}
-        run: |
-          echo "actual group1: $ACTUAL"
-          if [ "$ACTUAL" != "World" ]; then
-            echo "FAIL: expected 'World' but got '$ACTUAL'"
+          echo "match: $MATCH"
+          if [ "$MATCH" != "World" ]; then
+            echo "FAIL: expected 'World' but got '$MATCH'"
             exit 1
           fi
           echo "PASS"

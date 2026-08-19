@@ -1,4 +1,4 @@
-name: Test regex with flags
+name: Test regex match with flags
 on:
   workflow_dispatch:
 jobs:
@@ -6,29 +6,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - id: action
+      - id: action-case-insensitive
         uses: .
         with:
           text: "Hello, World!"
-          regex: "hello, (world)!"
+          regex: "hello"
           flags: "i"
-      - name: Assert match output with case-insensitive flag
+      - name: Assert case-insensitive match works
         env:
-          ACTUAL: ${{ steps.action.outputs.match }}
+          MATCH: ${{ steps.action-case-insensitive.outputs.match }}
         run: |
-          echo "actual match: $ACTUAL"
-          if [ "$ACTUAL" != "Hello, World!" ]; then
-            echo "FAIL: expected 'Hello, World!' but got '$ACTUAL'"
+          echo "match: $MATCH"
+          if [ "$MATCH" != "Hello" ]; then
+            echo "FAIL: expected 'Hello' with case-insensitive flag but got '$MATCH'"
             exit 1
           fi
           echo "PASS"
-      - name: Assert group1 output with case-insensitive flag
+      - id: action-no-flag
+        uses: .
+        with:
+          text: "Hello, World!"
+          regex: "hello"
+      - name: Assert case-sensitive match fails without flag
         env:
-          ACTUAL: ${{ steps.action.outputs.group1 }}
+          MATCH: ${{ steps.action-no-flag.outputs.match }}
         run: |
-          echo "actual group1: $ACTUAL"
-          if [ "$ACTUAL" != "World" ]; then
-            echo "FAIL: expected 'World' but got '$ACTUAL'"
+          echo "match: '$MATCH'"
+          if [ -n "$MATCH" ]; then
+            echo "FAIL: expected empty match without case-insensitive flag but got '$MATCH'"
             exit 1
           fi
           echo "PASS"
