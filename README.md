@@ -9,7 +9,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
 | v1.0.0 | [`v1.0.0`](https://github.com/chainguard-actions/kaisugi-action-regex-match/tree/v1.0.0) | — |
-| v1.0.1 | [`v1.0.1`](https://github.com/chainguard-actions/kaisugi-action-regex-match/tree/v1.0.1) | — |
+| v1.0.1 | [`v1.0.1`](https://github.com/chainguard-actions/kaisugi-action-regex-match/tree/v1.0.1) | [`45cc5ba`](https://github.com/kaisugi/action-regex-match/commit/45cc5bacf016a4c0d2c3c9d0f8b7c2f1b79687b8) |
 | v1.0.2 | [`v1.0.2`](https://github.com/chainguard-actions/kaisugi-action-regex-match/tree/v1.0.2) | — |
 
 ## Privacy
