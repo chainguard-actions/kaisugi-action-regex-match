@@ -1,4 +1,4 @@
-name: Test regex capturing groups
+name: Test regex match with capturing groups
 on:
   workflow_dispatch:
 jobs:
@@ -10,37 +10,32 @@ jobs:
         uses: .
         with:
           text: "2024-01-15"
-          regex: "([0-9]{4})-([0-9]{2})-([0-9]{2})"
-      - name: Assert match output
+          regex: "^(\\d{4})-(\\d{2})-(\\d{2})$"
+      - name: Assert match and capturing groups
         env:
-          ACTUAL_MATCH: ${{ steps.action.outputs.match }}
-          ACTUAL_GROUP1: ${{ steps.action.outputs.group1 }}
-          ACTUAL_GROUP2: ${{ steps.action.outputs.group2 }}
-          ACTUAL_GROUP3: ${{ steps.action.outputs.group3 }}
+          MATCH: ${{ steps.action.outputs.match }}
+          GROUP1: ${{ steps.action.outputs.group1 }}
+          GROUP2: ${{ steps.action.outputs.group2 }}
+          GROUP3: ${{ steps.action.outputs.group3 }}
         run: |
-          echo "match: $ACTUAL_MATCH"
-          echo "group1: $ACTUAL_GROUP1"
-          echo "group2: $ACTUAL_GROUP2"
-          echo "group3: $ACTUAL_GROUP3"
-
-          if [ "$ACTUAL_MATCH" != "2024-01-15" ]; then
-            echo "FAIL: expected match '2024-01-15' but got '$ACTUAL_MATCH'"
+          echo "match: $MATCH"
+          echo "group1: $GROUP1"
+          echo "group2: $GROUP2"
+          echo "group3: $GROUP3"
+          if [ "$MATCH" != "2024-01-15" ]; then
+            echo "FAIL: expected match '2024-01-15' but got '$MATCH'"
             exit 1
           fi
-
-          if [ "$ACTUAL_GROUP1" != "2024" ]; then
-            echo "FAIL: expected group1 '2024' but got '$ACTUAL_GROUP1'"
+          if [ "$GROUP1" != "2024" ]; then
+            echo "FAIL: expected group1 '2024' but got '$GROUP1'"
             exit 1
           fi
-
-          if [ "$ACTUAL_GROUP2" != "01" ]; then
-            echo "FAIL: expected group2 '01' but got '$ACTUAL_GROUP2'"
+          if [ "$GROUP2" != "01" ]; then
+            echo "FAIL: expected group2 '01' but got '$GROUP2'"
             exit 1
           fi
-
-          if [ "$ACTUAL_GROUP3" != "15" ]; then
-            echo "FAIL: expected group3 '15' but got '$ACTUAL_GROUP3'"
+          if [ "$GROUP3" != "15" ]; then
+            echo "FAIL: expected group3 '15' but got '$GROUP3'"
             exit 1
           fi
-
           echo "PASS"

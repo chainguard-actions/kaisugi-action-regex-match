@@ -1,0 +1,23 @@
+name: Test regex no match
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          text: "hello world"
+          regex: "^\\d+$"
+      - name: Assert match is empty when regex does not match
+        env:
+          MATCH: ${{ steps.action.outputs.match }}
+        run: |
+          echo "match: '$MATCH'"
+          if [ -n "$MATCH" ]; then
+            echo "FAIL: expected empty match but got '$MATCH'"
+            exit 1
+          fi
+          echo "PASS: match is empty as expected"
