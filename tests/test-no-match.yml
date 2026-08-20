@@ -10,14 +10,20 @@ jobs:
         uses: .
         with:
           text: "Hello, World!"
-          regex: "^\\d+$"
-      - name: Assert no match returns empty string
+          regex: "^[0-9]+$"
+      - name: Assert match is empty when no match
         env:
-          ACTUAL_MATCH: ${{ steps.action.outputs.match }}
+          MATCH: ${{ steps.action.outputs.match }}
+          GROUP1: ${{ steps.action.outputs.group1 }}
         run: |
-          echo "match: '$ACTUAL_MATCH'"
-          if [ "$ACTUAL_MATCH" != "" ]; then
-            echo "FAIL: expected match to be empty string but got '$ACTUAL_MATCH'"
+          echo "match: '$MATCH'"
+          echo "group1: '$GROUP1'"
+          if [ -n "$MATCH" ]; then
+            echo "FAIL: expected empty match but got '$MATCH'"
+            exit 1
+          fi
+          if [ -n "$GROUP1" ]; then
+            echo "FAIL: expected empty group1 but got '$GROUP1'"
             exit 1
           fi
           echo "PASS"
